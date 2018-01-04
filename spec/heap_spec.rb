@@ -1,4 +1,5 @@
 require "heap"
+require 'byebug'
 
 describe BinaryMinHeap do
   describe "indexing functions" do
@@ -37,7 +38,7 @@ describe BinaryMinHeap do
       prc = Proc.new do |el1, el2|
         -1 * (el1 <=> el2)
       end
-
+      
       expect(BinaryMinHeap.heapify_down([1, 2, 3], 0, &prc))
         .to eq([3, 2, 1])
       expect(BinaryMinHeap.heapify_down([1, 5, 4, 3], 0, &prc))
