@@ -1,3 +1,4 @@
+require 'byebug'
 class BinaryMinHeap
   attr_reader :store, :prc
 
@@ -46,14 +47,15 @@ class BinaryMinHeap
 
   def self.heapify_down(array, parent_idx, len = array.length, &prc)
     prc ||= Proc.new{ |x,y| x <=> y}
-    
+    # byebug
     
     child_indices(len, parent_idx).each do |idx| 
-      res = prc.call(array[parent_idx], array[idx])
-
-      if res==1
-        if(array[idx+1])
-          if idx==child_indices(len, parent_idx)[1] || (prc.call(array[idx], array[idx+1]) == -1)
+      res = prc.call(array[idx], array[parent_idx])
+      if res==-1
+        
+        if(child_indices(len, parent_idx)[1])
+          
+          if (prc.call(array[idx], array[idx+1]) == -1)
             array[parent_idx], array[idx] = array[idx], array[parent_idx]
             return heapify_down(array, idx, len, &prc)
           else 
@@ -64,12 +66,37 @@ class BinaryMinHeap
           array[parent_idx], array[idx] = array[idx], array[parent_idx]
           return heapify_down(array, idx, len, &prc)
         end 
-        
-        
+               
       end 
     end 
     array
   end
+
+  # def self.heapify_down(array, parent_idx, len = array.length, &prc)
+  #   prc ||= Proc.new{ |x,y| x <=> y}
+  #   #FIrst I want to get left and right child indices
+  #   #Base case: If neither of them are greater than the parent, then I just return the array 
+  #   #THen I pick the smallest child
+
+  #   left, right = child_indices(len, parent_idx)[0], child_indices(len, parent_idx)[1]
+
+  #   if prc.call(array[left], array[parent_idx])==-1 || prc.call(array[right], array[parent_idx])==-1
+  #     if array[right]
+  #       if (prc.call(array[left], array[right]) == -1)
+  #         array[parent_idx], array[left] = array[left], array[parent_idx]
+  #         return heapify_down(array, left, len, &prc)
+  #       else 
+  #         array[parent_idx], array[right] = array[right], array[parent_idx]
+  #         return heapify_down(array, right, len, &prc)
+  #       end 
+  #     else 
+  #       array[parent_idx], array[left] = array[left], array[parent_idx]
+  #       return heapify_down(array, left, len, &prc)
+  #     end 
+  #   end 
+  #   array 
+
+  # end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)
     if (child_idx==0 )
