@@ -10,12 +10,19 @@ class BinaryMinHeap
   end
 
   def extract
+    @store[0], @store[@store.length-1] = @store[@store.length-1], @store[0]
+    res = @store.pop
+    BinaryMinHeap.heapify_down(@store, 0, @store.length)
+    res
   end
 
   def peek
+    @store[0]
   end
 
   def push(val)
+    @store.push(val)
+    BinaryMinHeap.heapify_up(@store, @store.length-1, @store.length)
   end
 
   public
@@ -68,7 +75,7 @@ class BinaryMinHeap
     if (child_idx==0 )
       return array
     end 
-    
+
     prc ||= Proc.new{ |x,y| x <=> y}
     
     res = prc.call(array[child_idx], array[parent_index(child_idx)])
